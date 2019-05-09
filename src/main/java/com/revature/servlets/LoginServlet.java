@@ -41,6 +41,7 @@ public class LoginServlet extends DefaultServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		ObjectMapper om = new ObjectMapper();
 		Credentials credentials = om.readValue(request.getInputStream(), Credentials.class);
+		System.out.println(credentials);
 		
 		// 1. Login works fine, a session is created and is communicate to the client in some manner
 		// 2. Login fails, some error is received and must be communicated to the client via status code
