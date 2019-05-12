@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -19,7 +20,6 @@ import com.revature.beans.Reimbursement;
 import com.revature.beans.SubmissionReq;
 import com.revature.daos.RequestDao;
 import com.revature.services.LoginService;
-import com.revature.services.RequestService;
 import com.revature.util.HttpException;
 
 public class RequestServlet extends DefaultServlet {
@@ -39,7 +39,7 @@ public class RequestServlet extends DefaultServlet {
 		
 		ObjectMapper om = new ObjectMapper();
 		
-		ArrayList managers = requestDao.pullManagersFromUsers();
+		HashSet managers = requestDao.pullManagersFromUsers();
 
 		
 		om.writeValue(response.getOutputStream(), managers);

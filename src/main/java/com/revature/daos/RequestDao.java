@@ -14,15 +14,19 @@ import com.revature.services.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.SortedSet;
+
+import org.apache.jasper.tagplugins.jstl.core.Set;
 
 import com.revature.util.ConnectionUtil;
 import com.revature.util.HttpException;
 
 public class RequestDao {
 	
-	public ArrayList viewRequestsByUserId(int id) {
-		ArrayList<Reimbursement> reimbList = new ArrayList<>();
+	public HashSet viewRequestsByUserId(int id) {
+		HashSet<Reimbursement> reimbSet = new HashSet<>();
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
 			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
@@ -43,7 +47,7 @@ public class RequestDao {
 				int reimbStatus = rs.getInt("reimb_status_id");
 				int reimbType = rs.getInt("reimb_type_id");
 				
-				reimbList.add(new Reimbursement(reimbId, reimbAmount, reimbSubmitted, reimbResolved, description, reimbReceipt, reimbAuthor,
+				reimbSet.add(new Reimbursement(reimbId, reimbAmount, reimbSubmitted, reimbResolved, description, reimbReceipt, reimbAuthor,
 						reimbResolver, reimbStatus, reimbType));
 				
 				
@@ -53,7 +57,7 @@ public class RequestDao {
 			e.printStackTrace();
 			throw new HttpException(500);			
 			}
-		return reimbList;
+		return reimbSet;
 	
 	}
 	
@@ -83,8 +87,8 @@ public class RequestDao {
 
 
 
-	public ArrayList pullManagersFromUsers() {
-		ArrayList<Manager> managerList = new ArrayList<>();
+	public HashSet pullManagersFromUsers() {
+		HashSet<Manager> managerList = new HashSet<>();
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
 			String sql = "SELECT * FROM ers_users WHERE user_role_id = 2";
@@ -113,11 +117,11 @@ public class RequestDao {
 
 
 
-	public ArrayList viewPendingRequests(int id) {
-		ArrayList<PendingReq> pendingList = new ArrayList<>();
+	public HashSet viewPendingRequests(int id) {
+		HashSet<PendingReq> pendingList = new HashSet<>();
 		
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "SELECT reimb_id, reimb_amount, reimb_submitted, reimb_description, reimb_receipt, reimb_author, reimb_type_id FROM ers_reimbursement WHERE reimb_resolver = ?";
+			String sql = "SELECT reimb_id, reimb_amount, reimb_submitted, reimb_description, reimb_receipt, reimb_author, reimb_type_id FROM ers_reimbursement WHERE reimb_resolver = ? and reimb_status_id = 1;";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setLong(1, LoginService.userId);
 			System.out.println(LoginService.userId);

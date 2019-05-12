@@ -2,6 +2,7 @@ package com.revature.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class UpdateStatusServlet extends DefaultServlet {
 		
 		ObjectMapper om = new ObjectMapper();
 		
-		ArrayList pendingList = requestDao.viewPendingRequests(LoginService.userId);
+		HashSet pendingList = requestDao.viewPendingRequests(LoginService.userId);
 		System.out.println(pendingList);
 		
 		om.writeValue(response.getOutputStream(), pendingList);

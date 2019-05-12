@@ -37,6 +37,22 @@ public class LoginService {
 		// 		value equal to the id on the returned user object
 		return user.getId();
 	}
+	
+	public int getRole(Credentials credentials) throws NoSuchAlgorithmException{
+		User user = loginDao.getPasswordByUsername(credentials.getUsername());
+		return user.getRoleId();
+	}
+	
+	public String getFirstName(Credentials credentials) throws NoSuchAlgorithmException{
+		User user = loginDao.getPasswordByUsername(credentials.getUsername());
+		return user.getFirstName();
+	}
+	
+	public String getLastName(Credentials credentials) throws NoSuchAlgorithmException{
+		User user = loginDao.getPasswordByUsername(credentials.getUsername());
+		return user.getLastName();
+	}
+
 
 	public LoginService(LoginDao loginDao) {
 		super();

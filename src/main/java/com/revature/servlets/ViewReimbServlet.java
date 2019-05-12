@@ -2,6 +2,7 @@ package com.revature.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class ViewReimbServlet extends DefaultServlet{
 		
 		ObjectMapper om = new ObjectMapper();
 		
-		ArrayList reimbList = requestDao.viewRequestsByUserId(LoginService.userId);
+		HashSet reimbList = requestDao.viewRequestsByUserId(LoginService.userId);
 
 		om.writeValue(response.getOutputStream(), reimbList);
 		

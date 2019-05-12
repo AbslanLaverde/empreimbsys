@@ -41,15 +41,20 @@ public class LoginServlet extends DefaultServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		ObjectMapper om = new ObjectMapper();
 		Credentials credentials = om.readValue(request.getInputStream(), Credentials.class);
-		System.out.println(credentials);
 		
 		// 1. Login works fine, a session is created and is communicate to the client in some manner
 		// 2. Login fails, some error is received and must be communicated to the client via status code
 		//		400 - username/password don't match, or username doesn't exist
 		//      500 - Some unhandled exception occurs during processing, servers fault
 		Integer id = null;
+		Integer roleID = null;
+		String firstName = "";
+		String lastName = "";
 		try {
 			id = this.loginService.login(credentials);
+			roleID = this.loginService.getRole(credentials);
+			firstName = this.loginService.getFirstName(credentials);
+			lastName = this.loginService.getLastName(credentials);
 		} catch (HttpException e) {
 			response.setStatus(e.getStatus());
 			return;
@@ -58,9 +63,13 @@ public class LoginServlet extends DefaultServlet {
 			e.printStackTrace();
 		}
 		
-		HttpSession session = request.getSession();
+		String cache = id + " " + credentials.getUsername() + " " + firstName + " " + lastName + " " + roleID;
+		
+		HttpSession session = request.getSession(true);
 		
 		session.setAttribute("id", id);	
+		
+		om.writeValue(response.getOutputStream(), cache);
 		
 	}
 }
